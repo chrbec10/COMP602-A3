@@ -44,6 +44,7 @@
 main {
     background-color: white;
     box-shadow: 0 0 20px rgb(177, 176, 176);
+    min-height: 85vh;
 
 }
 
@@ -54,7 +55,7 @@ body {
 footer {
     background-color: #5e5459;
     color: #eee;
-    height: 100px;
+    min-height: 120px;
 }
 
 .footer-link {

@@ -52,7 +52,7 @@ Vue.component('product', {
             brand: "Fox",
             selectedVariant: 0,
             alt: "Some kittens",
-            details: ["Genuine leather", "Solid brass fittings", '122cm / 4 feet long, 1" wide', "Available in a range of colours"],
+            details: ["Genuine leather", "Solid brass fittings", '122cm / 4 feet long, 1" wide', "Available in a range of colours", "Hand-made to order"],
             filepath: "./img/leashes/leash-",
             variants: [
                 {
@@ -280,42 +280,52 @@ Vue.component('cart-content', {
     },
 
     template: `
-        <div clas="cart-content">
-            <h2>Your Cart</h2>
-            <table v-if="cart.length">
-                <thead>
-                    <tr>
-                        <th>Num.</th>
-                        <th>Item</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in cart">
-                        <td>{{ index + 1 }}.</td>
-                        <td>{{ item.product }} - {{ item.color }}</td>
-                        <td>\${{ item.price }}</td>
-                        </tr>
-                    <tr class="hr-top">
-                        <td></td>
-                        <td></td>
-                        <td><strong>Subtotal:</strong> \${{ subTotal }}</td>
-                    </tr>
-                    </tr>
+        <div class="cart-content">
+        <button @click="cartClick">{{cartStatus}} Cart</button>
+            <div v-show="showCart">
+                <h2>Your Cart</h2>
+                <table v-if="cart.length">
+                    <thead>
                         <tr>
-                        <td></td>
-                        <td></td>
-                        <td><strong>Shipping:</strong> \${{ shipping }}</td>
-                    </tr>
-                    <tr class="hr-top">
-                        <td></td>
-                        <td></td>
-                        <td><strong>Total:</strong> \${{ cartTotal }}</td>
-                    </tr>
-                </tbody>
-            </table>
+                            <th>Num.</th>
+                            <th>Item</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in cart">
+                            <td>{{ index + 1 }}.</td>
+                            <td>{{ item.product }} - {{ item.color }}</td>
+                            <td>\${{ item.price }}</td>
+                            </tr>
+                        <tr class="hr-top">
+                            <td></td>
+                            <td></td>
+                            <td><strong>Subtotal:</strong> \${{ subTotal }}</td>
+                        </tr>
+                        </tr>
+                            <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Shipping:</strong> \${{ shipping }}</td>
+                        </tr>
+                        <tr class="hr-top">
+                            <td></td>
+                            <td></td>
+                            <td><strong>Total:</strong> \${{ cartTotal }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p v-else>Empty.</p>
+            </div>
         </div>
     `,
+
+    data() {
+        return {
+            showCart: false,
+        }
+    },
 
     computed: {
 
@@ -340,6 +350,21 @@ Vue.component('cart-content', {
             } else {
                 return this.subTotal + this.shipping
             }
+        },
+
+
+        cartStatus(){
+            if (this.showCart) {
+                return "Hide"
+            } else {
+                return "Show"
+            }
+        }
+    },
+
+    methods: {
+        cartClick(){
+            this.showCart = !this.showCart
         }
     }
 })
