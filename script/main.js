@@ -191,7 +191,7 @@ Vue.component('product-tabs', {
                     <li class="tab nav-item" 
                         v-for="(tab, index) in tabs" 
                         @click="selectedTab = tab">
-                            <a class="nav-link":class="{ active: selectedTab === tab }">{{ tab }}</a>
+                            <a class="nav-link" :class="{ active: selectedTab === tab }">{{ tab }}</a>
                     </li>
                 </ul>
             </div>
@@ -281,6 +281,53 @@ Vue.component('cart-content', {
             } else {
                 return 2.99
             }
+        }
+    }
+})
+
+Vue.component('nav-bar', {
+    template: `
+        <nav class="navbar navbar-expand-lg bg-success navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="./img/header-logo.png" alt="Paradise Zoo" height="40">
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item" v-for="item in navItems"><a :class="{ active: item.navActive }" :href="item.navLink" class="nav-link">{{ item.navText }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    `,
+
+    data() {
+        return {
+            navItems: [
+                {
+                    navLink: "#",
+                    navText: "Home",
+                    navActive: false
+                },
+
+                {
+                    navLink: "#",
+                    navText: "Products",
+                    navActive: true
+                },
+
+                {
+                    navLink: "#",
+                    navText: "FAQ",
+                    navActive: false
+                }
+            ]
         }
     }
 })
