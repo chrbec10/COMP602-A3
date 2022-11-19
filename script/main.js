@@ -4,31 +4,25 @@ Vue.component('product', {
 
     template: `
         <div id="product">
-
             <div class="product-image">
                 <img :src="image" :alt="alt" />
             </div>
-
             <div class="product-info">
-
                 <h1>{{ title }}</h1>
-
                 <p v-if="inStock">In Stock</p>
                 <p v-else :class="{ noStock: !inStock }">Out of Stock</p>
-
                 <h2>Details</h2>
                 <ul>
                     <li v-for="detail in details">{{ detail }}</li>
                 </ul>
-
                 <h3>Colours</h3>
                 <div style="display:block">
-                <div v-for="(variant, index) in variants" :key="variant.variantId" style="display:inline-block">
-                    <div class="color-box" 
-                        :style="{ backgroundColor: variant.variantColor }"
-                        @click="updateProduct(index)">
+                    <div v-for="(variant, index) in variants" :key="variant.variantId" style="display:inline-block">
+                        <div class="color-box" 
+                            :style="{ backgroundColor: variant.variantBg }"
+                            @click="updateProduct(index)">
+                        </div>
                     </div>
-                </div>
                 </div>
                 <button @click="addToCart"
                 :disabled="!inStock"
@@ -51,22 +45,25 @@ Vue.component('product', {
                     variantColor: "brown",
                     variantImage: "https://placekitten.com/200/200",
                     variantQuantity: 10,
-                    variantPrice: 499.99
+                    variantPrice: 499.99,
+                    variantBg: "brown"
                 },
                 {
                     variantId: 2235,
-                    variantColor: "black",
+                    variantColor: "blue",
                     variantImage: "https://placekitten.com/201/201",
                     variantQuantity: 5,
-                    variantPrice: 699.99
+                    variantPrice: 699.99,
+                    variantBg: "blue"
                 },
                 {
                     variantId: 2236,
-                    variantColor: "orange",
+                    variantColor: "green",
                     variantImage: "https://placekitten.com/199/199",
                     variantQuantity: 0,
-                    variantPrice: 299.99
-                }
+                    variantPrice: 299.99,
+                    variantBg: "green"
+                },
             ],
             reviews: [],
 
@@ -116,24 +113,20 @@ Vue.component('product', {
 Vue.component('product-review', {
     template: `
         <form class="review-form" @submit.prevent="onSubmit">
-
             <p>
                 <label for="name">Name:</label>
                 <input id="name" v-model="name" placeholder="name">
             </p>
-
             <p>
                 <label for="review">Review:</label>
                 <textarea id="review" v-model="review"></textarea>
             </p>
-
             <p v-if="errors.length">
                 <b>Please correct the following error(s):</b>
                 <ul>
                     <li v-for="error in errors">{{ error }}</li>
                 </ul>
             </p>
-
             <p>
                 <label for="rating">Rating:</label>
                 <select id="rating" v-model.number="rating">
@@ -144,12 +137,10 @@ Vue.component('product-review', {
                     <option>1</option>
                 </select>
             </p>
-
             
             <p>
                 <input type="submit" value="Submit">
             </p>
-
         </form>
     `,
 
@@ -191,7 +182,7 @@ Vue.component('product-tabs', {
                     <li class="tab nav-item" 
                         v-for="(tab, index) in tabs" 
                         @click="selectedTab = tab">
-                            <a class="nav-link":class="{ active: selectedTab === tab }">{{ tab }}</a>
+                            <a class="nav-link" :class="{ active: selectedTab === tab }">{{ tab }}</a>
                     </li>
                 </ul>
             </div>
@@ -206,7 +197,6 @@ Vue.component('product-tabs', {
                     </li>
                 </ul>
             </div>
-
             <div v-show="selectedTab === 'Make a Review'">
                 <product-review></product-review>
             </div>
@@ -245,7 +235,6 @@ Vue.component('cart-content', {
     template: `
         <div clas="cart-content">
             <h2>Your Cart</h2>
-
             <table v-if="cart.length">
                 <thead>
                     <tr>
@@ -254,33 +243,104 @@ Vue.component('cart-content', {
                         <th>Price</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     <tr v-for="(item, index) in cart">
                         <td>{{ index + 1 }}.</td>
                         <td>{{ item.product }} - {{ item.color }}</td>
                         <td>\${{ item.price }}</td>
+                        </tr>
+                    <tr class="hr-top">
+                        <td></td>
+                        <td></td>
+                        <td><strong>Subtotal:</strong> \${{ subTotal }}</td>
                     </tr>
-                    <tr>
+                    </tr>
+                        <tr>
                         <td></td>
                         <td></td>
-                        <td>Shipping: {{ shipping }}</td>
+                        <td><strong>Shipping:</strong> \${{ shipping }}</td>
+                    </tr>
+                    <tr class="hr-top">
+                        <td></td>
+                        <td></td>
+                        <td><strong>Total:</strong> \${{ cartTotal }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     `,
 
     computed: {
-        cartTotal() {
-            return 0
+
+        subTotal(){
+            // return this.cart.reduce((acc, item) => acc + item.variantPrice, 0);
+            return this.cart.reduce((acc, item) => acc + item.price, 0);
         },
 
         shipping() {
             if (this.premium) {
-                return "Free"
+                return " Free"
             } else {
-                return 2.99
+                return 6.99
             }
+        },
+
+        cartTotal(){
+            if (this.premium) {
+                return this.subTotal
+            } else {
+                return this.subTotal + this.shipping
+            }
+        }
+    }
+})
+
+Vue.component('nav-bar', {
+    template: `
+        <nav class="navbar navbar-expand-lg bg-magenta-grad navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="./img/logos/Fox Pet Supplies.png" alt="FOX" height="80">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item" v-for="item in navItems"><a :class="{ active: item.navActive }" :href="item.navLink" class="nav-link">{{ item.navText }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    `,
+
+    data() {
+        return {
+            // Array of navigation values for building navbar
+            navItems: [
+                {
+                    navLink: "#",
+                    navText: "Home",
+                    navActive: false
+                },
+
+                {
+                    navLink: "#",
+                    navText: "Products",
+                    navActive: true
+                },
+
+                {
+                    navLink: "#",
+                    navText: "FAQ",
+                    navActive: false
+                },
+                {
+                    navLink: "#",
+                    navText: "About Us",
+                    navActive: false
+                }
+            ]
         }
     }
 })
@@ -290,7 +350,7 @@ var app = new Vue({
     el: '#app',
 
     data: {
-        premium: true,
+        premium: false,
         cart: []
     },
 
@@ -300,6 +360,3 @@ var app = new Vue({
         }
     }
 })
-
-
-

@@ -19,3 +19,11 @@
 .blocked {
     display: block;
 }
+
+.hr-top {
+    border-top: 1px solid #ddd;
+}
+
+.bg-magenta-grad {
+    background: linear-gradient(90deg, rgba(68,0,43,1) 0%, rgba(121,9,88,1) 35%, rgba(182,18,130,1) 100%);
+}
