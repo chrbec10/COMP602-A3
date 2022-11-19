@@ -23,12 +23,12 @@ Vue.component('product', {
 
                 <h3>Colours</h3>
                 <div style="display:block">
-                <div v-for="(variant, index) in variants" :key="variant.variantId" style="display:inline-block">
-                    <div class="color-box" 
-                        :style="{ backgroundColor: variant.variantBg }"
-                        @click="updateProduct(index)">
+                    <div v-for="(variant, index) in variants" :key="variant.variantId" style="display:inline-block">
+                        <div class="color-box" 
+                            :style="{ backgroundColor: variant.variantBg }"
+                            @click="updateProduct(index)">
+                        </div>
                     </div>
-                </div>
                 </div>
                 <button @click="addToCart"
                 :disabled="!inStock"
@@ -312,10 +312,10 @@ Vue.component('cart-content', {
 
 Vue.component('nav-bar', {
     template: `
-        <nav class="navbar navbar-expand-lg bg-success navbar-dark">
+        <nav class="navbar navbar-expand-lg bg-magenta-grad navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
-                    <img src="./img/header-logo.png" alt="Paradise Zoo" height="40">
+                    <img src="./img/logos/Fox Pet Supplies.png" alt="FOX" height="80">
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -351,6 +351,11 @@ Vue.component('nav-bar', {
                 {
                     navLink: "#",
                     navText: "FAQ",
+                    navActive: false
+                },
+                {
+                    navLink: "#",
+                    navText: "About Us",
                     navActive: false
                 }
             ]
