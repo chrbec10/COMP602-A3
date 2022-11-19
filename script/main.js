@@ -25,7 +25,7 @@ Vue.component('product', {
                 <div style="display:block">
                 <div v-for="(variant, index) in variants" :key="variant.variantId" style="display:inline-block">
                     <div class="color-box" 
-                        :style="{ backgroundColor: variant.variantColor }"
+                        :style="{ backgroundColor: variant.variantBg }"
                         @click="updateProduct(index)">
                     </div>
                 </div>
@@ -51,22 +51,25 @@ Vue.component('product', {
                     variantColor: "brown",
                     variantImage: "https://placekitten.com/200/200",
                     variantQuantity: 10,
-                    variantPrice: 499.99
+                    variantPrice: 499.99,
+                    variantBg: "brown"
                 },
                 {
                     variantId: 2235,
-                    variantColor: "black",
+                    variantColor: "blue",
                     variantImage: "https://placekitten.com/201/201",
                     variantQuantity: 5,
-                    variantPrice: 699.99
+                    variantPrice: 699.99,
+                    variantBg: "blue"
                 },
                 {
                     variantId: 2236,
-                    variantColor: "orange",
+                    variantColor: "green",
                     variantImage: "https://placekitten.com/199/199",
                     variantQuantity: 0,
-                    variantPrice: 299.99
-                }
+                    variantPrice: 299.99,
+                    variantBg: "green"
+                },
             ],
             reviews: [],
 
@@ -245,7 +248,6 @@ Vue.component('cart-content', {
     template: `
         <div clas="cart-content">
             <h2>Your Cart</h2>
-
             <table v-if="cart.length">
                 <thead>
                     <tr>
@@ -260,26 +262,49 @@ Vue.component('cart-content', {
                         <td>{{ index + 1 }}.</td>
                         <td>{{ item.product }} - {{ item.color }}</td>
                         <td>\${{ item.price }}</td>
+                        </tr>
+                    <tr class="hr-top">
+                        <td></td>
+                        <td></td>
+                        <td><strong>Subtotal:</strong> \${{ subTotal }}</td>
                     </tr>
-                    <tr>
+                    </tr>
+                        <tr>
                         <td></td>
                         <td></td>
-                        <td>Shipping: {{ shipping }}</td>
+                        <td><strong>Shipping:</strong> \${{ shipping }}</td>
+                    </tr>
+                    <tr class="hr-top">
+                        <td></td>
+                        <td></td>
+                        <td><strong>Total:</strong> \${{ cartTotal }}</td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
     `,
 
     computed: {
-        cartTotal() {
-            return 0
+
+        subTotal(){
+            // return this.cart.reduce((acc, item) => acc + item.variantPrice, 0);
+            return this.cart.reduce((acc, item) => acc + item.price, 0);
         },
 
         shipping() {
             if (this.premium) {
-                return "Free"
+                return " Free"
             } else {
-                return 2.99
+                return 6.99
+            }
+        },
+
+        cartTotal(){
+            if (this.premium) {
+                return this.subTotal
+            } else {
+                return this.subTotal + this.shipping
             }
         }
     }
@@ -309,6 +334,7 @@ Vue.component('nav-bar', {
 
     data() {
         return {
+            // Array of navigation values for building navbar
             navItems: [
                 {
                     navLink: "#",
@@ -337,7 +363,7 @@ var app = new Vue({
     el: '#app',
 
     data: {
-        premium: true,
+        premium: false,
         cart: []
     },
 
