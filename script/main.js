@@ -351,6 +351,7 @@ Vue.component('cart-content', {
 
     computed: {
 
+
         // Sums the value of items in the cart
         subTotal(){
             return this.cart.reduce((acc, item) => acc + item.price, 0);
@@ -359,8 +360,7 @@ Vue.component('cart-content', {
         // Checks if user qualifies for free shipping
         shipping() {
             if (this.premium) {
-                return " Free"
-            } else {
+                return " Free"            } else {
                 return 8
             }
         },
