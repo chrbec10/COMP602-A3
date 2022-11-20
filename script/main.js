@@ -1,5 +1,6 @@
 var eventBus = new Vue()
 
+// Product display component. Contains information for each product variant.
 Vue.component('product', {
 
     template: `
@@ -11,6 +12,7 @@ Vue.component('product', {
                         <div v-for="(variant, index) in variants" :key="variant.variantId" style="display:inline-block">
                             <div class="color-box" 
                                 :style="{ backgroundColor: variant.variantBg }"
+                                :class="{ colorBoxSelected : variant.variantId === currentId}"
                                 @click="updateProduct(index)">
                             </div>
                         </div>
@@ -51,9 +53,12 @@ Vue.component('product', {
             product: "Premium Leather Leash",
             brand: "Fox",
             selectedVariant: 0,
-            alt: "Some kittens",
+            alt: "Leather leash",
             details: ["Genuine leather", "Solid brass fittings", '122cm / 4 feet long, 1" wide', "Available in a range of colours", "Hand-made to order"],
+
             filepath: "./img/leashes/leash-",
+            
+            // Array of product variants, used to build the colour dots, change the active image, and pass information to the cart
             variants: [
                 {
                     variantId: 101,
@@ -123,17 +128,20 @@ Vue.component('product', {
             this.$emit('add-to-cart', cartItem)
         },
 
-        // Changes image to selected product
+        // Changes product image to selected product
         updateProduct(index) {
             this.selectedVariant = index
         },
         
     },
+
+
     computed: {
         title() {
             return this.brand + ' ' + this.product
         },
 
+        // Used to retrieve information about the currently active variant
         currPrice() {
             return '$' + this.variants[this.selectedVariant].variantPrice
         },
@@ -148,9 +156,14 @@ Vue.component('product', {
 
         currentColor() {
             return this.variants[this.selectedVariant].variantColor
+        },
+
+        currentId () {
+            return this.variants[this.selectedVariant].variantId
         }
     },
 
+    // Receives product review from the product-review component and adds it to the array to be pushed to tabs for display
     mounted() {
         eventBus.$on('review-submitted', productReview => {
             this.reviews.push(productReview)
@@ -161,6 +174,12 @@ Vue.component('product', {
 Vue.component('product-review', {
     template: `
         <form class="review-form" @submit.prevent="onSubmit">
+            <div v-if="errors.length" class="alert alert-danger">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                    <li v-for="error in errors">{{ error }}</li>
+                </ul>
+            </div>
             <p>
                 <label for="name" class="form-label">Name:</label>
                 <input id="name" v-model="name" placeholder="Name" class="form-control">
@@ -169,12 +188,7 @@ Vue.component('product-review', {
                 <label for="review" class="form-label">Review:</label>
                 <textarea id="review" v-model="review" class="form-control"></textarea>
             </p>
-            <p v-if="errors.length">
-                <b>Please correct the following error(s):</b>
-                <ul>
-                    <li v-for="error in errors">{{ error }}</li>
-                </ul>
-            </p>
+
             <p>
                 <label for="rating" class="form-label">Rating:</label>
                 <select id="rating" v-model.number="rating" class="form-select">
@@ -202,7 +216,10 @@ Vue.component('product-review', {
     },
 
     methods: {
+        // Process review form and push it to the event bus so other components can read it on submit
         onSubmit() {
+            this.errors = [];
+
             if(this.name && this.review && this.rating) {
                 let productReview = {
                     name: this.name,
@@ -213,6 +230,8 @@ Vue.component('product-review', {
                 this.name = null
                 this.review = null
                 this.rating = null
+
+            // Check if any form entries are blank and report errors
             } else {
                 if(!this.name) this.errors.push("Name required.")
                 if(!this.review) this.errors.push("Review required.")
@@ -266,6 +285,7 @@ Vue.component('product-tabs', {
 })
 
 Vue.component('cart-content', {
+    
     // Pass down cart contents from app
     props: {
         cart: {
@@ -280,14 +300,14 @@ Vue.component('cart-content', {
     },
 
     template: `
-        <div class="cart-content">
-        <button @click="cartClick">{{cartStatus}} Cart</button>
-            <div v-show="showCart">
-                <h2>Your Cart</h2>
-                <table v-if="cart.length">
+        <div class="cart-content sticky-top text-end pt-3">
+        <button @click="cartClick" class="btn btn-primary"><i class="fa-solid fa-cart-shopping fa-lg"></i></button>
+            <div v-show="showCart" class="position-absolute end-0 text-start shopping-cart">
+                <h3>Your Cart</h3>
+                <table v-if="cart.length" class="table table-hover table-sm">
                     <thead>
                         <tr>
-                            <th>Num.</th>
+                            <th>#</th>
                             <th>Item</th>
                             <th>Price</th>
                         </tr>
@@ -297,24 +317,26 @@ Vue.component('cart-content', {
                             <td>{{ index + 1 }}.</td>
                             <td>{{ item.product }} - {{ item.color }}</td>
                             <td>\${{ item.price }}</td>
-                            </tr>
-                        <tr class="hr-top">
+                        </tr>
+                    </tbody>
+                    <tfoot class="table-group-divider">
+                        <tr>
                             <td></td>
-                            <td></td>
-                            <td><strong>Subtotal:</strong> \${{ subTotal }}</td>
+                            <td><strong>Subtotal:</strong></td>
+                            <td>\${{ subTotal }}</td>
                         </tr>
                         </tr>
                             <tr>
                             <td></td>
-                            <td></td>
-                            <td><strong>Shipping:</strong> \${{ shipping }}</td>
+                            <td><strong>Shipping:</strong> </td>
+                            <td>\${{ shipping }}</td>
                         </tr>
                         <tr class="hr-top">
                             <td></td>
-                            <td></td>
-                            <td><strong>Total:</strong> \${{ cartTotal }}</td>
+                            <td><strong>Total:</strong> </td>
+                            <td>\${{ cartTotal }}</td>
                         </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
                 <p v-else>Empty.</p>
             </div>
@@ -343,7 +365,7 @@ Vue.component('cart-content', {
             }
         },
 
-        // Adds the cost of shipping to the subtotal
+        // Adds the cost of shipping to the subtotal to get the total cost
         cartTotal(){
             if (this.premium) {
                 return this.subTotal
@@ -351,18 +373,11 @@ Vue.component('cart-content', {
                 return this.subTotal + this.shipping
             }
         },
-
-
-        cartStatus(){
-            if (this.showCart) {
-                return "Hide"
-            } else {
-                return "Show"
-            }
-        }
     },
 
     methods: {
+        
+        // Used to toggle cart visibility.
         cartClick(){
             this.showCart = !this.showCart
         }
@@ -428,9 +443,10 @@ var app = new Vue({
         cart: []
     },
 
+    // Adds items to the global cart array
     methods: {
         updateCart(id) {
             this.cart.push(id)
         }
     }
-})
+});
