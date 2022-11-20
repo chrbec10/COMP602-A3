@@ -7,6 +7,10 @@
     border-radius: 50%;
 }
 
+.colorBoxSelected {
+    border: 5px solid rgba(255,255,255,0.3)
+}
+
 .noStock {
     text-decoration: line-through;
 }
@@ -26,4 +30,49 @@
 
 .bg-magenta-grad {
     background: linear-gradient(90deg, rgba(68,0,43,1) 0%, rgba(121,9,88,1) 35%, rgba(182,18,130,1) 100%);
+}
+
+.bg-magenta {
+    background: rgba(182,18,130,1);
+}
+
+.inStock {
+    border: 2px solid #006300;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background-color: #198754;
+    color: #eee;
+}
+
+main {
+    background-color: white;
+    box-shadow: 0 0 20px rgb(177, 176, 176);
+    min-height: 85vh;
+
+}
+
+body {
+    background-color: #eee;
+}
+
+footer {
+    background-color: #5e5459;
+    color: #eee;
+    min-height: 120px;
+}
+
+.footer-link {
+    color: #eee;
+}
+
+.footer-link:hover {
+    color: rgb(194, 132, 174);
+}
+
+.shopping-cart {
+    background-color: white;
+    border-radius: 5%;
+    border: 1px solid #5e5459;
+    padding: 1rem;
 }

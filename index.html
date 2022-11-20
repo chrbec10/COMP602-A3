@@ -10,10 +10,14 @@
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" 
     crossorigin="anonymous"></script>
 
+    <!-- FontAwesome JS -->
+    <script src="https://kit.fontawesome.com/9204a30953.js" crossorigin="anonymous"></script>
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 
     <title>Shop</title>
+    <link rel="icon" type="image/x-icon" href="./img/logos/fox favicon.png">
 </head>
 <body>
     <!-- Vue container -->
@@ -23,7 +27,7 @@
         <nav-bar></nav-bar>
 
         <!-- Main site structure -->
-        <main class="container pt-5">
+        <main class="container pt-2 pb-5 px-5">
 
 
                 <!-- Shopping cart component -->
@@ -34,8 +38,23 @@
             </div>
         </main>
     </div>
+
+    <footer class="pb-3">
+        <ul class="nav justify-content-center py-2">
+            <li class="nav-item"><a class="nav-link footer-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link footer-link" href="#">Products</a></li>
+            <li class="nav-item"><a class="nav-link footer-link" href="#">FAQ</a></li>
+            <li class="nav-item"><a class="nav-link footer-link" href="#">About Us</a></li>
+        </ul>
+        <p class="text-center align-bottom mb-1"><small>Leash images are © <a href="https://kinfolkleather.co.nz/" class="footer-link">Kinfolk Leather</a> and are being used only for educational purposes</small></p>
+        <p class="text-center align-bottom mb-0"><small>Fox Pet Supplies website developed by Chris Becker</small></p>
+    </footer>
+
     <!-- Vue library from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13"></script>
+
+    <!-- Vuex from CDN -->
+    <script src=https://unpkg.com/vuex@4.1.0/dist/vuex.global.js></script>
 
     <!-- Custom Vue JS -->
     <script src="script/main.js"></script>
