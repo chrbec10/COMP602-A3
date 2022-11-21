@@ -76,3 +76,7 @@ footer {
     border: 1px solid #5e5459;
     padding: 1rem;
 }
+
+.nav-link {
+    color: rgba(121,9,88,1) !important;
+}
